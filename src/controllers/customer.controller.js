@@ -22,12 +22,12 @@ const createCustomer = asyncHandler(async (req, res) => {
         throw new ApiError(400, "Customer with this phone already exists");
     }
 
-    // Set SSE headers only once
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
+    // // Set SSE headers only once
+    // res.setHeader('Content-Type', 'text/event-stream');
+    // res.setHeader('Cache-Control', 'no-cache');
+    // res.setHeader('Connection', 'keep-alive');
 
-    try {
+    
         const customer = await Customer.create({
             name,
             email,
@@ -35,15 +35,20 @@ const createCustomer = asyncHandler(async (req, res) => {
             dealer: dealerId
         });
 
+
+        return res.status(200).json(
+            new ApiResponse(200, customer, "Customer details updated successfully")
+        );
+
         // Stream customer data
-        res.write(`data: ${JSON.stringify({ message: "Customer created successfully", customer })}\n\n`);
+        // res.write(`data: ${JSON.stringify({ message: "Customer created successfully", customer })}\n\n`);
 
         // End the stream properly
-        res.end();
-    } catch (error) {
-        res.write(`data: ${JSON.stringify({ error: "Error creating customer" })}\n\n`);
-        res.end();
-    }
+        // res.end();
+     //catch (error) {
+        // res.write(`data: ${JSON.stringify({ error: "Error creating customer" })}\n\n`);
+        // res.end();
+    // }
 });
 
 
