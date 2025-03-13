@@ -116,7 +116,7 @@ const registerBusiness = asyncHandler(async (req, res) => {
     await dealer.save();
 
     return res.status(200).json(
-        new ApiResponse(200, dealer, "Business registered successfully")
+        new ApiResponse(200, dealer, `Business form of dealer ${dealer.name} registered successfully`)
     );
 });
 
@@ -203,7 +203,7 @@ const updateBusinessDetails = asyncHandler(async (req, res) => {
     await dealer.save();
 
     return res.status(200).json(
-        new ApiResponse(200, dealer, "Business details updated successfully")
+        new ApiResponse(200, dealer, `Business details of dealer :${dealer.name} updated successfully`)
     );
 });
 const deleteDealer = asyncHandler(async (req, res) => {
@@ -217,7 +217,7 @@ const deleteDealer = asyncHandler(async (req, res) => {
     await Dealer.findByIdAndDelete(dealer._id);
 
     return res.status(200).json(
-        new ApiResponse(200, {}, "Dealer deleted successfully")
+        new ApiResponse(200, {}, `Dealer ${dealer.name} deleted successfully`)
     );
 });
 const getCustomerByName = asyncHandler(async (req, res) => {
@@ -239,7 +239,7 @@ const getCustomerByName = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, customers, "Customers retrieved successfully")
+        new ApiResponse(200, customers, `Customers for name ${name} retrieved successfully`)
     );
 });
 const getCustomerById = asyncHandler(async (req, res) => {
@@ -257,7 +257,7 @@ const getCustomerById = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, customer, "Customer retrieved successfully")
+        new ApiResponse(200, customer, `Customer ${customer.name}retrieved successfully`)
     );
 });
 const getallCustomer =asyncHandler(async(req,res)=>{
@@ -284,7 +284,7 @@ const getOutstandingBill = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, { outstandingBill: dealer.outStandingBill }, "Outstanding bill retrieved successfully")
+        new ApiResponse(200, { outstandingBill: dealer.outStandingBill }, `Total Outstanding bill is ${dealer.outStandingBill}`)
     );
 });
 
@@ -299,7 +299,7 @@ const getTotalBill = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, { totalBill: dealer.TotalBill }, "Total bill retrieved successfully")
+        new ApiResponse(200, { totalBill: dealer.TotalBill }, `Total bill is ${dealer.TotalBill}`)
     );
 });
 const recievePayment = asyncHandler(async (req, res) => {
@@ -337,19 +337,15 @@ const recievePayment = asyncHandler(async (req, res) => {
     await customer.save();
     await dealer.save();
 
-    res.status(200).json({
-        success: true,
-        message: "Payment received successfully",
-        dealer: {
-            TotalBill: dealer.TotalBill,
-            OutstandingBill: dealer.outStandingBill,
-        },
-        customer: {
-            TotalBill: customer.TotalBill,
-            OutstandingBill: customer.outstandingBill,
-        }
-    });
-});
+    res.status(200).json(
+        new ApiResponse(200, 
+            {
+                dealer: { totalBill: dealer.TotalBill, outstandingBill: dealer.outStandingBill },
+                customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill }
+            },
+            `Payment paid by customer ${customer.name} is ${amountPaid}  now total bill is ${dealer.outStandingBill} `)
+);
+})
 const getWeeklySalesForDealer = asyncHandler(async (req, res) => {
     const dealerId = req.dealer._id;
     const startOfWeek = new Date();

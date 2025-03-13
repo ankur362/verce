@@ -1,3 +1,4 @@
+import { log } from "console";
 import { Customer } from "../models/customer.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
@@ -35,9 +36,9 @@ const createCustomer = asyncHandler(async (req, res) => {
             dealer: dealerId
         });
 
-
+     //dynamic message
         return res.status(200).json(
-            new ApiResponse(200, customer, "Customer details updated successfully")
+            new ApiResponse(200, customer, `Customer name : ${name} created  successfully`)
         );
 
         // Stream customer data
@@ -89,9 +90,9 @@ const updateCustomer = asyncHandler(async (req, res) => {
     if (gstNumber) customer.gstNumber = gstNumber;
 
     await customer.save();
-
+//dynamic message
     return res.status(200).json(
-        new ApiResponse(200, customer, "Customer details updated successfully")
+        new ApiResponse(200, customer, `Customer details with  ${name} updated successfully`)
     );
 });
 
@@ -106,9 +107,11 @@ const deleteCustomer = asyncHandler(async (req, res) => {
     if (!customer) {
         throw new ApiError(404, "Customer not found");
     }
+       console.log(customer.name);
+       
     await Customer.findByIdAndDelete(customerId)
     return res.status(200).json(
-        new ApiResponse(200, {}, "Dealer deleted successfully")
+        new ApiResponse(200, {}, `Customer with name :${customer.name} deleted successfully`)
     );
 
 
@@ -122,9 +125,9 @@ const getOutstandingBill = asyncHandler(async (req, res) => {
     if (!customer) {
         throw new ApiError(404, "customer  not found");
     }
-
+//dynamic message
     return res.status(200).json(
-        new ApiResponse(200, { outstandingBill: customer.outstandingBill }, "Outstanding bill retrieved successfully")
+        new ApiResponse(200, { outstandingBill: customer.outstandingBill }, `customer with name ${customer.name} has Outstanding bill : ${customer.outstandingBill} `)
     );
 });
 
@@ -137,9 +140,9 @@ const getTotalBill = asyncHandler(async (req, res) => {
     if (!customer) {
         throw new ApiError(404, "Customer not found");
     }
-
+//dynamic message
     return res.status(200).json(
-        new ApiResponse(200, { totalBill: customer.TotalBill }, "Total bill retrieved successfully")
+        new ApiResponse(200, { totalBill: customer.TotalBill }, `customer with name ${customer.name} hasTotal bill : ${customer.TotalBill}`)
     );
 });
 
