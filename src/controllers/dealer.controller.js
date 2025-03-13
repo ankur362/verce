@@ -239,7 +239,7 @@ const getCustomerByName = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, customers, `Customers for name ${name} retrieved successfully`)
+        new ApiResponse(200, {customers,show:true}, `Customers for name ${name} retrieved successfully`)
     );
 });
 const getCustomerById = asyncHandler(async (req, res) => {
@@ -270,7 +270,7 @@ const getallCustomer =asyncHandler(async(req,res)=>{
         return res.status(404).json({ message: "No customers found for this dealer." });
     }
 
-    res.status(200).json(new ApiResponse(200, customers, "Customer retrieved successfully"));
+    res.status(200).json(new ApiResponse(200, {customers,show:true}, "Customer retrieved successfully"));
 } 
 )
 const getOutstandingBill = asyncHandler(async (req, res) => {

@@ -109,12 +109,24 @@ const getProductByName = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Product is not present. create it first")
     }
     return res.status(200).json(
-        new ApiResponse(200, { product }, "Product is found successfully")
+        new ApiResponse(200, { product ,show:true}, `Product ${name}is found successfully`)
     );
+})
+const getAllProductOfDealer=asyncHandler(async(req,res)=>{
+    const {dealerId}=req.dealer._id;
+    const product =await Product.findOne(dealerId)
+    if(!product)
+    {
+        throw new ApiError(404,"No product is present")
+    }
+    return res.status(200).json(
+        new ApiResponse(200,{product,show:false},'all Product is here ')
+    )
 })
 export {
     createProduct,
     updateProduct,
     getProductByName,
-    deleteProduct
+    deleteProduct,
+    getAllProductOfDealer
 };
