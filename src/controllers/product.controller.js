@@ -115,9 +115,9 @@ const getProductByName = asyncHandler(async (req, res) => {
 })
 const getAllProductOfDealer=asyncHandler(async(req,res)=>{
     const dealerId=req.dealer._id;
-    console.log(dealerId);
+   
     
-    const product =await Product.find(dealerId)
+    const product =await Product.find({dealer: dealerId})
     if(!product)
     {
         throw new ApiError(404,"No product is present")
