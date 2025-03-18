@@ -264,7 +264,7 @@ const getallCustomer =asyncHandler(async(req,res)=>{
     const dealerId= req.dealer._id;
 
     
-    const customers = await Customer.find({ dealerId });
+    const customers = await Customer.find({ dealer: dealerId });
 
     if (!customers.length) {
         return res.status(404).json({ message: "No customers found for this dealer." });
@@ -346,6 +346,8 @@ const recievePayment = asyncHandler(async (req, res) => {
             `Payment paid by customer ${customer.name} is ${amountPaid}  now total bill is ${dealer.outStandingBill} `)
 );
 })
+
+
 const getWeeklySalesForDealer = asyncHandler(async (req, res) => {
     const dealerId = req.dealer._id;
     const startOfWeek = new Date();
@@ -357,19 +359,10 @@ const getWeeklySalesForDealer = asyncHandler(async (req, res) => {
         { $group: { _id: null, totalSales: { $sum: "$totalCost" } } }
     ]);
 
-    res.status(200).json(
-        new ApiResponse(200,
-            { 
-                success: true,
-                totalSales: salesThisWeek[0]?.totalSales || 0
-                
-            },
-            `Total Sales of week is ${totalSales} `
-        )
-        
-       
-       
-    );
+    res.status(200).json(new ApiResponse(200, 
+        { dealer: { totalBill: salesThisWeek[0]?.totalSales || 0, outstandingBill: 0 } },
+        `Total weekly sales: ${salesThisWeek[0]?.totalSales || 0}`
+    ));
 });
 
 const getMonthlySalesForDealer = asyncHandler(async (req, res) => {
@@ -383,41 +376,25 @@ const getMonthlySalesForDealer = asyncHandler(async (req, res) => {
         { $group: { _id: null, totalSales: { $sum: "$totalCost" } } }
     ]);
 
-    res.status(200).json(
-        new ApiResponse(200,
-            {
-            success: true,
-        totalSales: salesThisMonth[0]?.totalSales || 0
-
-        }
-        ,`Total Sales of week is ${totalSales} `
-    )
-    
-
-        
-    );
+    res.status(200).json(new ApiResponse(200, 
+        { dealer: { totalBill: salesThisMonth[0]?.totalSales || 0, outstandingBill: 0 } },
+        `Total monthly sales: ${salesThisMonth[0]?.totalSales || 0}`
+    ));
 });
 
 const getCustomersWithPendingBalance = asyncHandler(async (req, res) => {
     const dealerId = req.dealer._id;
     
-    const customers = await Customer.find({ 
-        dealer: dealerId, 
-        outstandingBill: { $gt: 0 } 
-    }).sort({ outstandingBill: -1 }).populate("dealer");
+    const customers = await Customer.find({ dealer: dealerId, outstandingBill: { $gt: 0 } })
+        .sort({ outstandingBill: -1 })
+        .populate("dealer");
 
-    res.status(200).json(
-        new ApiResponse(200,
-            {
-                success:true,
-                customers
-            }
-            `all  customer retrived  `
-            
-        )
-       
-       
-    );
+    res.status(200).json(new ApiResponse(200, 
+        { customers: customers.map(customer => ({
+            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill }
+        })) },
+        `Customers with pending balances retrieved successfully.`
+    ));
 });
 
 const getTopCustomersByBusinessValue = asyncHandler(async (req, res) => {
@@ -435,12 +412,14 @@ const getTopCustomersByBusinessValue = asyncHandler(async (req, res) => {
             }
         });
 
-    res.status(200).json(  {
-        success:true,
-        customers
-    }
-    `all  customer retrived  `);
+    res.status(200).json(new ApiResponse(200, 
+        { customers: customers.map(customer => ({
+            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill }
+        })) },
+        `Top customers by business value retrieved successfully.`
+    ));
 });
+
 
 
 
