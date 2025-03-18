@@ -391,8 +391,9 @@ const getCustomersWithPendingBalance = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, 
         { customers: customers.map(customer => ({
-            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill }
-        })) },
+            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill },
+            
+        })),flow:true  },
         `Customers with pending balances retrieved successfully.`
     ));
 });
@@ -414,8 +415,11 @@ const getTopCustomersByBusinessValue = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, 
         { customers: customers.map(customer => ({
-            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill }
-        })) },
+            customer: { totalBill: customer.TotalBill, outstandingBill: customer.outstandingBill },
+        
+            
+        })),
+        flow:true },
         `Top customers by business value retrieved successfully.`
     ));
 });
