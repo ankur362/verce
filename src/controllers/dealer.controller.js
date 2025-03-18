@@ -357,10 +357,19 @@ const getWeeklySalesForDealer = asyncHandler(async (req, res) => {
         { $group: { _id: null, totalSales: { $sum: "$totalCost" } } }
     ]);
 
-    res.status(200).json({
-        success: true,
-        totalSales: salesThisWeek[0]?.totalSales || 0
-    });
+    res.status(200).json(
+        new ApiResponse(200,
+            { 
+                success: true,
+                totalSales: salesThisWeek[0]?.totalSales || 0
+                
+            },
+            `Total Sales of week is ${totalSales} `
+        )
+        
+       
+       
+    );
 });
 
 const getMonthlySalesForDealer = asyncHandler(async (req, res) => {
@@ -374,10 +383,19 @@ const getMonthlySalesForDealer = asyncHandler(async (req, res) => {
         { $group: { _id: null, totalSales: { $sum: "$totalCost" } } }
     ]);
 
-    res.status(200).json({
-        success: true,
+    res.status(200).json(
+        new ApiResponse(200,
+            {
+            success: true,
         totalSales: salesThisMonth[0]?.totalSales || 0
-    });
+
+        }
+        ,`Total Sales of week is ${totalSales} `
+    )
+    
+
+        
+    );
 });
 
 const getCustomersWithPendingBalance = asyncHandler(async (req, res) => {
@@ -388,10 +406,18 @@ const getCustomersWithPendingBalance = asyncHandler(async (req, res) => {
         outstandingBill: { $gt: 0 } 
     }).sort({ outstandingBill: -1 }).populate("dealer");
 
-    res.status(200).json({
-        success: true,
-        customers
-    });
+    res.status(200).json(
+        new ApiResponse(200,
+            {
+                success:true,
+                customers
+            }
+            `all  customer retrived  `
+            
+        )
+       
+       
+    );
 });
 
 const getTopCustomersByBusinessValue = asyncHandler(async (req, res) => {
@@ -409,10 +435,11 @@ const getTopCustomersByBusinessValue = asyncHandler(async (req, res) => {
             }
         });
 
-    res.status(200).json({
-        success: true,
+    res.status(200).json(  {
+        success:true,
         customers
-    });
+    }
+    `all  customer retrived  `);
 });
 
 
