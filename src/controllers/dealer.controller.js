@@ -261,7 +261,7 @@ const getCustomerById = asyncHandler(async (req, res) => {
     );
 });
 const getallCustomer =asyncHandler(async(req,res)=>{
-    const {dealerId} = req.dealer._id;
+    const dealerId= req.dealer._id;
 
     
     const customers = await Customer.find({ dealerId });

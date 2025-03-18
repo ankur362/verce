@@ -6,7 +6,8 @@ const dealerSchema = new Schema(
         email: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            unique:true
         },
         password: {
             type: String,
@@ -18,9 +19,11 @@ const dealerSchema = new Schema(
         },
         phone: {
             type: Number,
-            trim: true
+            trim: true,
+            unique:true
+            
         },
-        adress: {
+        address: {
             type: String,
             trim: true
 

@@ -123,6 +123,7 @@ const getAllProductOfDealer=asyncHandler(async(req,res)=>{
         new ApiResponse(200,{product,show:false},'all Product is here ')
     )
 })
+
 export {
     createProduct,
     updateProduct,
