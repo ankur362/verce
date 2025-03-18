@@ -1,3 +1,4 @@
+import { log } from "console";
 import { Customer } from "../models/customer.model.js";
 import { Product } from "../models/product.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -113,8 +114,10 @@ const getProductByName = asyncHandler(async (req, res) => {
     );
 })
 const getAllProductOfDealer=asyncHandler(async(req,res)=>{
-    const {dealerId}=req.dealer._id;
-    const product =await Product.findOne(dealerId)
+    const dealerId=req.dealer._id;
+    console.log(dealerId);
+    
+    const product =await Product.find(dealerId)
     if(!product)
     {
         throw new ApiError(404,"No product is present")
