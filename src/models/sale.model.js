@@ -68,7 +68,7 @@ const saleSchema = new Schema(
         },
         paymentMethod: {
             type: String,
-            enum: ["Cash", "UPI", "Card", "Mix of All"],
+            
             required: true
         },
     

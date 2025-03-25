@@ -43,11 +43,11 @@ const createProduct = asyncHandler(async (req, res) => {
 //update the product details
 const updateProduct = asyncHandler(async (req, res) => {
     const dealerId = req.dealer._id;
-    const { productId } = req.body;
+    const { name, gstRate, rate } = req.body;
 
     // Find customer
     const product = await Product.findOne({
-        _id: productId,
+        name: { $regex: name, $options: "i" }, 
         dealer: dealerId
     });
 
@@ -55,20 +55,8 @@ const updateProduct = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Product not found");
     }
 
-    const { name, gstRate, rate } = req.body;
-
-    // Check if the new Procduct name already exists for this dealer (if provided)
-    if (name) {
-        const existingProduct = await Product.findOne({
-            name,
-            dealer: dealerId,
-            _id: { $ne: productId }
-        });
-        if (existingProduct) {
-            throw new ApiError(400, "Product already in use");
-        }
-        product.name = name;
-    }
+    
+    
 
     // Update only provided fields
 
@@ -110,7 +98,7 @@ const getProductByName = asyncHandler(async (req, res) => {
         throw new ApiError(404, "Product is not present. create it first")
     }
     return res.status(200).json(
-        new ApiResponse(200, { product ,show:true}, `Product ${name}is found successfully`)
+        new ApiResponse(200, { product ,show:true}, `Product ${name} is found successfully`)
     );
 })
 const getAllProductOfDealer=asyncHandler(async(req,res)=>{
@@ -123,7 +111,7 @@ const getAllProductOfDealer=asyncHandler(async(req,res)=>{
         throw new ApiError(404,"No product is present")
     }
     return res.status(200).json(
-        new ApiResponse(200,{product,show:false},'all Product is here ')
+        new ApiResponse(200,{product,show:false},'All Products are Below ')
     )
 })
 
