@@ -47,38 +47,12 @@ const dealerSchema = new Schema(
         },
         BusinessCategory: {
             type: String,
-            enum: {
-                values: [
-                    "Accounting & CA",
-                    "Interior Designer",
-                    "Automobiles/Auto parts",
-                    "Salon & Spa",
-                    "Liquor Store",
-                    "Book/Stationary store",
-                    "ConstructionMaterial&Equipment",
-                    "Electrical & Electronics Equipments",
-                    "Fashion Accessory/Cosmetics",
-                    "Tailoring/Boutique",
-                    "Fruit And Vegetable",
-                    "Kirana/General Merchant"],
-                message: "{VALUE} is not a valid business type"
-            },
             trim: true
 
 
         },
         BusinessType: {
             type: String,
-            enum: {
-                values: [
-                    "Retail",
-                    "Wholesale",
-                    "Manufacturer",
-                    "Distributor",
-                    "Service Provider",
-                    "others"],
-                message: "{VALUE} is not a valid business type"
-            },
             trim: true
 
         },
